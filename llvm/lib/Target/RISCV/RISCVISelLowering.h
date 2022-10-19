@@ -439,23 +439,22 @@ public:
   bool convertSelectOfConstantsToMath(EVT VT) const override { return true; }
 
   bool shouldInsertFencesForAtomic(const Instruction *I) const override {
-    if (isa<StoreInst>(I)) {
+    if (isa<LoadInst>(I)) {
+      auto LI = dyn_cast<LoadInst>(I);
+      AtomicOrdering ao = LI->getOrdering();
+      if (ao == AtomicOrdering::SequentiallyConsistent) {
+        return true;
+      }
+    }
+    return false;
+    /*if (isa<StoreInst>(I)) {
       auto LI = dyn_cast<StoreInst>(I);
       AtomicOrdering ao = LI->getOrdering();
       if (ao == AtomicOrdering::SequentiallyConsistent) {
         return true;
       }
-      //printf("%d\n", I->getOrdering());
-      //printf("%d\n", I->getNumOperands());
-      //printf("%d\n", I->getOperand(0));
-      //printf("%s\n", I->getOperand(0));
-      //printf("%d\n", I->getOperand(0));
     }
-    return false;
-    //return (I.getOpcode() == llvm::)
-    //return isa<StoreInst>(I);
-    //return false;
-    //return isa<LoadInst>(I) || isa<StoreInst>(I);
+    return false;*/
   }
   Instruction *emitLeadingFence(IRBuilderBase &Builder, Instruction *Inst,
                                 AtomicOrdering Ord) const override;

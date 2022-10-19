@@ -12647,8 +12647,8 @@ Instruction *RISCVTargetLowering::emitLeadingFence(IRBuilderBase &Builder,
 Instruction *RISCVTargetLowering::emitTrailingFence(IRBuilderBase &Builder,
                                                     Instruction *Inst,
                                                     AtomicOrdering Ord) const {
-  if (isa<LoadInst>(Inst) && isAcquireOrStronger(Ord))
-    return Builder.CreateFence(AtomicOrdering::Acquire);
+  //if (isa<LoadInst>(Inst) && isAcquireOrStronger(Ord))
+  //  return Builder.CreateFence(AtomicOrdering::Acquire);
   return nullptr;
 }
 
